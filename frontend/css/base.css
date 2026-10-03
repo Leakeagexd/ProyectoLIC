@@ -1,0 +1,122 @@
+:root{
+    --sintel-red:#e2231a;
+    --sintel-dark:#1a1a1a;
+}
+
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif; color:#1a1a1a; 
+}
+
+a { 
+    text-decoration:none; 
+}
+
+  /*  Header  */
+  .top-header{ background:#1a1a1a; }
+  .logo-sintel{ font-weight:800; font-size:1.6rem; letter-spacing:1px; color:#fff; }
+  .logo-sintel .highlight{ color:var(--sintel-red); }
+  .top-header .form-control{ border-radius:4px 0 0 4px; }
+  .top-header .btn-search{ border-radius:0 4px 4px 0; background:#fff; }
+  .top-header .icon-link{ color:#fff; }
+
+  .nav-bar{ background:#f2f2f2; border-bottom:1px solid #e0e0e0; }
+  .nav-bar .nav-link{ color:#1a1a1a; font-weight:600; font-size:.95rem; }
+  .nav-bar .nav-link:hover{ color:var(--sintel-red); }
+
+  /* Banner principal  */
+  .hero-banner{ background:#fafafa; width: 100%; overflow: hidden; }
+  .hero-banner .carousel-item {
+    height: 450px;
+  }
+  @media (max-width: 768px) {
+    .hero-banner .carousel-item {
+      height: 250px;
+    }
+  }
+  .hero-banner .carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* baners secundario o sea los de periferico y electrodomesticos */
+  .category-banner{
+    position:relative;
+    height:220px;
+    border-radius:6px;
+    overflow:hidden;
+    background:#e9ecef;
+  }
+  .category-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .category-banner-overlay{
+    position:absolute; inset:0;
+    background:rgba(0,0,0,.45);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:2rem;
+    color:#fff;
+    z-index: 1;
+  }
+
+  /* cartas de los productos */
+  .product-card{ border:1px solid #e5e5e5; border-radius:4px; background:#fff; }
+  .product-img-container{ 
+    height: 170px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    overflow: hidden;
+    background: #f8f9fa;
+    border-radius: 4px;
+  }
+  .product-img-container img{
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .badge-sale{ background:var(--sintel-red); color:#fff; font-weight:700; font-size:.75rem; }
+  .price-old{ text-decoration:line-through; color:#888; font-size:.85rem; }
+  .price-new{ font-weight:800; font-size:1.15rem; }
+  .btn-comprar{ background:var(--sintel-red); color:#fff; border:none; font-weight:600; }
+  .btn-comprar:hover{ background:#c31c14; color:#fff; }
+
+  /* Carrusel*/
+  .destacados-section{ background:#161616; color:#fff; }
+  .destacados-card{ background:#fff; color:#1a1a1a; border-radius:4px; }
+  .destacados-img-container{ 
+    height: 140px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    background: #f8f9fa;
+    border-radius: 4px;
+  }
+  .destacados-img-container img{
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
+  }
+
+  /* Video   */
+  .video-section{ padding:0; }
+
+  /* Perks  */
+  .perks-strip .perk-icon{
+    width:48px; height:48px;
+    background:#e9ecef;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+
+  /*  Footer  */
+  footer{ background:#1a1a1a; color:#ccc; }
+  footer a{ color:#ccc; }
+  footer a:hover{ color:#fff; }
+  .newsletter-bar{ background:#111; }
