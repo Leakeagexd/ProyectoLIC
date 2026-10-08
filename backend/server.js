@@ -44,3 +44,24 @@ app.listen(PORT, async () => {
     console.log('Revisa la configuración en el archivo .env');
   }
 });
+
+app.get('/api/productos', async (req, res) => {
+  try {
+    const pool = await getConnection();
+    const result = await pool.request().query(`
+      SELECT 
+        id_producto, 
+        nombre, 
+        descripcion, 
+        precio, 
+        stock, 
+        imagen 
+      FROM Productos
+    `);
+
+    res.json(result.recordset);
+  } catch (error) {
+    console.error('Error al obtener productos:', error);
+    res.status(500).json({ error: 'Error al consultar el catálogo' });
+  }
+});
