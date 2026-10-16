@@ -1,11 +1,473 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout | Sintel</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+  body{ background:#fafafa; display:flex; flex-direction:column; min-height:100vh; }
+  main{ flex:1 0 auto; }
+  footer{ margin-top:auto; }
+  .page-title{ font-weight:800; }
+  .page-title .accent{ color:var(--sintel-red); }
+  .breadcrumb a{ color:#555; }
+  .breadcrumb a:hover{ color:var(--sintel-red); }
+  .sintel-card{ background:#fff; border:1px solid #e5e5e5; border-radius:4px; }
+  .btn-outline-sintel{ color:var(--sintel-red); border:1px solid var(--sintel-red); background:#fff; font-weight:600; }
+  .btn-outline-sintel:hover{ background:var(--sintel-red); color:#fff; }
+  .form-control:focus, .form-select:focus, .form-check-input:focus, .btn-check:focus + .btn{
+    border-color:var(--sintel-red); box-shadow:0 0 0 .2rem rgba(226,35,26,.2);
+  }
+  .form-check-input:checked{ background-color:var(--sintel-red); border-color:var(--sintel-red); }
+  a.link-sintel{ color:var(--sintel-red); font-weight:600; }
+  a.link-sintel:hover{ color:#c31c14; }
+  #cartBadge{ font-size:.65rem; }
+  .thumb-box{ width:90px; height:90px; display:flex; align-items:center; justify-content:center; background:#f8f9fa; border-radius:4px; overflow:hidden; flex-shrink:0; }
+  .thumb-box img{ max-width:100%; max-height:100%; object-fit:contain; }
+  .qty-group{ display:inline-flex; align-items:center; border:1px solid #ddd; border-radius:4px; background:#fff; }
+  .qty-group button{ border:0; background:transparent; width:34px; height:34px; font-weight:700; }
+  .qty-group button:hover:not(:disabled){ color:var(--sintel-red); }
+  .qty-group span{ min-width:34px; text-align:center; font-weight:600; }
+  .summary-sticky{ position:sticky; top:1rem; }
+  .nav-pills .nav-link{ color:#1a1a1a; font-weight:600; }
+  .nav-pills .nav-link.active{ background:var(--sintel-red); color:#fff; }
+</style>
 </head>
 <body>
-    
+
+<header class="top-header py-2">
+  <div class="container d-flex align-items-center justify-content-between flex-wrap gap-2">
+    <div class="order-1" style="min-width:200px;">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Buscar" aria-label="Buscar">
+        <button class="btn btn-search" type="button">
+          <img src="../img/LUPA.png" alt="Buscar" width="18" height="18">
+        </button>
+      </div>
+    </div>
+
+    <div class="order-2 mx-auto">
+      <a href="../index.html"><span class="logo-sintel">SINT<span class="highlight">EL</span></span></a>
+    </div>
+
+    <div class="order-3 d-flex align-items-center gap-3">
+      <span id="sesionArea" class="small"><a href="login.html" class="icon-link">Inicia Sesión</a></span>
+      <a href="carrito.html" class="icon-link position-relative" aria-label="Carrito de compras">
+        <img src="../img/carrito.png" alt="Carrito de compras" width="22" height="22">
+        <span id="cartBadge" class="badge-sale badge rounded-pill position-absolute top-0 start-100 translate-middle d-none">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<nav class="nav-bar py-2">
+  <div class="container d-flex justify-content-center">
+    <ul class="nav gap-4">
+      <li class="nav-item"><a class="nav-link" href="#">Ofertas</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Electrodomesticos</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Informatica</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">TVs</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Audio</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+<div class="container py-4">
+  <h1 class="h3 page-title mb-4">Finalizar <span class="accent">compra</span></h1>
+  <div id="checkoutContent"></div>
+</div>
+
+</main>
+
+<footer class="pt-5 pb-3 mt-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-3">
+        <span class="logo-sintel">SINT<span class="highlight">EL</span></span>
+        <p class="small mt-2">Tecnología y electrodomésticos al mejor precio, con la garantía y el respaldo que buscás.</p>
+      </div>
+      <div class="col-md-3">
+        <h6 class="text-white">Ayuda</h6>
+        <ul class="list-unstyled small">
+          <li><a href="#">Cómo comprar</a></li>
+          <li><a href="#">Preguntas frecuentes</a></li>
+          <li><a href="#">Devoluciones</a></li>
+          <li><a href="#">Envíos</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3">
+        <h6 class="text-white">Nosotros</h6>
+        <ul class="list-unstyled small">
+          <li><a href="#">Quiénes somos</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3">
+        <h6 class="text-white">Legal</h6>
+        <ul class="list-unstyled small">
+          <li><a href="#">Términos y condiciones</a></li>
+          <li><a href="#">Política de privacidad</a></li>
+          <li><a href="#">Garantías</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-3 my-4">
+      <a href="#" class="icon-link"><img src="../img/fb.png" alt="Facebook" style="width: 30px; height: 30px;"></a>
+      <a href="#" class="icon-link"><img src="../img/x.png" alt="X" style="width: 30px; height: 30px;"></a>
+      <a href="#" class="icon-link"><img src="../img/ig.png" alt="Instagram" style="width: 30px; height: 30px;"></a>
+      <a href="#" class="icon-link"><img src="../img/wh.png" alt="WhatsApp" style="width: 30px; height: 30px;"></a>
+    </div>
+
+    <hr class="border-secondary">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center">
+      <p class="small mb-0">Medios de pago</p>
+      <div class="d-flex gap-2">
+        <span class="badge bg-white text-dark">VISA</span>
+        <span class="badge bg-white text-dark">Mastercard</span>
+        <span class="badge bg-white text-dark">AMEX</span>
+        <span class="badge bg-white text-dark">PayPal</span>
+      </div>
+    </div>
+
+    <p class="text-center small text-white mt-4 mb-0">© 2026 SINTEL. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="toastSintel" class="toast align-items-center text-bg-dark border-0" role="status" aria-live="polite" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="toastMsg"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+const CART_KEY = 'sintel_carrito';
+const SESSION_KEY = 'sintel_sesion';
+const IMG_DEFAULT = 'img/refrigerador 2.png';
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function money(n) {
+  return '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+// Las rutas de imagen vienen de la BD como "img/archivo.png" (relativas a /frontend); desde /pages hay que subir un nivel
+function imgSrc(path) {
+  const p = (path && String(path).trim()) || IMG_DEFAULT;
+  return /^(https?:|data:|\/|\.\.\/)/.test(p) ? p : '../' + p;
+}
+function imgFallback(el) {
+  el.onerror = null;
+  el.src = '../' + IMG_DEFAULT;
+}
+
+function getCart() {
+  try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch (e) { return []; }
+}
+function saveCart(cart) {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  updateHeader();
+}
+function cartCount() {
+  return getCart().reduce((t, i) => t + i.cantidad, 0);
+}
+function cartSubtotal() {
+  return getCart().reduce((t, i) => t + i.precio * i.cantidad, 0);
+}
+function addToCart(id, nombre, precio, imagen, stock, cantidad) {
+  cantidad = cantidad || 1;
+  const cart = getCart();
+  const item = cart.find(i => i.id === Number(id));
+  const max = stock != null ? Number(stock) : Infinity;
+  if (item) {
+    item.cantidad = Math.min(item.cantidad + cantidad, max);
+    if (stock != null) item.stock = Number(stock);
+  } else {
+    cart.push({ id: Number(id), nombre, precio: Number(precio), imagen: imagen || '', stock: stock != null ? Number(stock) : null, cantidad: Math.min(cantidad, max) });
+  }
+  saveCart(cart);
+}
+
+function getSession() {
+  try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch (e) { return null; }
+}
+function logout() {
+  localStorage.removeItem(SESSION_KEY);
+  updateHeader();
+  if (typeof onSessionChange === 'function') onSessionChange();
+}
+function updateHeader() {
+  const badge = document.getElementById('cartBadge');
+  const n = cartCount();
+  badge.textContent = n;
+  badge.classList.toggle('d-none', n === 0);
+
+  const area = document.getElementById('sesionArea');
+  const s = getSession();
+  if (s) {
+    area.innerHTML = `<span class="text-white">Hola, ${escapeHtml(s.nombre.split(' ')[0])}</span> · <a href="#" id="btnSalir" class="icon-link">Salir</a>`;
+    document.getElementById('btnSalir').addEventListener('click', e => { e.preventDefault(); logout(); });
+  } else {
+    area.innerHTML = '<a href="login.html" class="icon-link">Inicia Sesión</a>';
+  }
+}
+function showToast(msg) {
+  document.getElementById('toastMsg').textContent = msg;
+  bootstrap.Toast.getOrCreateInstance(document.getElementById('toastSintel'), { delay: 2500 }).show();
+}
+document.addEventListener('DOMContentLoaded', updateHeader);
+
+
+const PEDIDOS_KEY = 'sintel_pedidos';
+const DESCUENTO_EFECTIVO = 0.10;
+const DEPARTAMENTOS = ['Ahuachapán','Cabañas','Chalatenango','Cuscatlán','La Libertad','La Paz','La Unión','Morazán','San Miguel','San Salvador','San Vicente','Santa Ana','Sonsonate','Usulután'];
+
+function metodoPago() {
+  const r = document.querySelector('input[name="pago"]:checked');
+  return r ? r.value : 'tarjeta';
+}
+function totales() {
+  const subtotal = cartSubtotal();
+  const descuento = metodoPago() === 'efectivo' ? subtotal * DESCUENTO_EFECTIVO : 0;
+  return { subtotal, descuento, total: subtotal - descuento };
+}
+function pintarTotales() {
+  const t = totales();
+  document.getElementById('resSubtotal').textContent = money(t.subtotal);
+  document.getElementById('filaDescuento').classList.toggle('d-none', t.descuento === 0);
+  document.getElementById('resDescuento').textContent = '-' + money(t.descuento);
+  document.getElementById('resTotal').textContent = money(t.total);
+}
+
+function render() {
+  const cart = getCart();
+  const cont = document.getElementById('checkoutContent');
+  if (!cart.length) {
+    cont.innerHTML = `
+      <div class="sintel-card p-5 text-center">
+        <h5 class="fw-bold">No hay nada que pagar</h5>
+        <p class="text-muted">Tu carrito está vacío.</p>
+        <a href="../index.html" class="btn btn-comprar px-4">Ir a comprar</a>
+      </div>`;
+    return;
+  }
+  const s = getSession() || {};
+
+  cont.innerHTML = `
+    <form id="formCheckout" class="row g-4" novalidate>
+      <div class="col-lg-8">
+        <div class="sintel-card p-4 mb-4">
+          <h6 class="fw-bold mb-3">1. Datos de contacto y envío</h6>
+          ${s.email ? '' : '<p class="small text-muted">¿Ya tienes cuenta? <a class="link-sintel" href="login.html?redirect=checkout">Inicia sesión</a> para autocompletar tus datos.</p>'}
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label small fw-bold" for="nombre">Nombre completo</label>
+              <input type="text" class="form-control" id="nombre" required minlength="3" value="${escapeHtml(s.nombre || '')}">
+              <div class="invalid-feedback">Ingresa tu nombre completo.</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold" for="email">Correo electrónico</label>
+              <input type="email" class="form-control" id="email" required value="${escapeHtml(s.email || '')}">
+              <div class="invalid-feedback">Ingresa un correo válido.</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold" for="telefono">Teléfono</label>
+              <input type="tel" class="form-control" id="telefono" required pattern="[0-9+\\- ]{8,15}" placeholder="7000-0000">
+              <div class="invalid-feedback">Ingresa un teléfono válido (8 a 15 dígitos).</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold" for="departamento">Departamento</label>
+              <select class="form-select" id="departamento" required>
+                <option value="">Selecciona...</option>
+                ${DEPARTAMENTOS.map(d => `<option>${d}</option>`).join('')}
+              </select>
+              <div class="invalid-feedback">Selecciona un departamento.</div>
+            </div>
+            <div class="col-12">
+              <label class="form-label small fw-bold" for="direccion">Dirección de entrega</label>
+              <input type="text" class="form-control" id="direccion" required minlength="8" placeholder="Colonia, calle, número de casa">
+              <div class="invalid-feedback">Ingresa una dirección de entrega.</div>
+            </div>
+            <div class="col-12">
+              <label class="form-label small fw-bold" for="notas">Notas para la entrega (opcional)</label>
+              <textarea class="form-control" id="notas" rows="2"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="sintel-card p-4">
+          <h6 class="fw-bold mb-3">2. Método de pago</h6>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="radio" name="pago" id="pagoTarjeta" value="tarjeta" checked>
+            <label class="form-check-label" for="pagoTarjeta">Tarjeta de crédito / débito</label>
+          </div>
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="radio" name="pago" id="pagoEfectivo" value="efectivo">
+            <label class="form-check-label" for="pagoEfectivo">Efectivo contra entrega <span class="badge-sale badge ms-1">10% OFF</span></label>
+          </div>
+
+          <div id="camposTarjeta" class="row g-3">
+            <div class="col-12">
+              <label class="form-label small fw-bold" for="tarjetaNombre">Nombre en la tarjeta</label>
+              <input type="text" class="form-control" id="tarjetaNombre" autocomplete="cc-name" required minlength="3">
+              <div class="invalid-feedback">Ingresa el nombre que aparece en la tarjeta.</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold" for="tarjetaNumero">Número de tarjeta</label>
+              <input type="text" class="form-control" id="tarjetaNumero" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" maxlength="19" required>
+              <div class="invalid-feedback">Ingresa un número de tarjeta válido (13 a 19 dígitos).</div>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="form-label small fw-bold" for="tarjetaVence">Vence (MM/AA)</label>
+              <input type="text" class="form-control" id="tarjetaVence" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/AA" maxlength="5" required>
+              <div class="invalid-feedback">Fecha inválida o vencida.</div>
+            </div>
+            <div class="col-6 col-md-3">
+              <label class="form-label small fw-bold" for="tarjetaCvv">CVV</label>
+              <input type="password" class="form-control" id="tarjetaCvv" inputmode="numeric" autocomplete="cc-csc" maxlength="4" required>
+              <div class="invalid-feedback">CVV inválido.</div>
+            </div>
+          </div>
+          <p id="avisoEfectivo" class="small text-muted mb-0 d-none">Pagarás en efectivo al recibir tu pedido. Se aplica 10% de descuento sobre el subtotal.</p>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="sintel-card p-3 summary-sticky">
+          <h6 class="fw-bold mb-3">Tu pedido</h6>
+          ${cart.map(i => `
+            <div class="d-flex gap-2 align-items-center mb-2">
+              <div class="thumb-box" style="width:48px;height:48px;"><img src="${escapeHtml(imgSrc(i.imagen))}" alt="" onerror="imgFallback(this)"></div>
+              <div class="flex-grow-1 small">${escapeHtml(i.nombre)}<br><span class="text-muted">x${i.cantidad}</span></div>
+              <div class="small fw-bold">${money(i.precio * i.cantidad)}</div>
+            </div>`).join('')}
+          <hr>
+          <div class="d-flex justify-content-between small mb-2"><span>Subtotal</span><span id="resSubtotal"></span></div>
+          <div class="d-flex justify-content-between small mb-2 d-none" id="filaDescuento"><span>Descuento efectivo (10%)</span><span id="resDescuento" style="color:var(--sintel-red);"></span></div>
+          <hr>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="fw-bold">Total</span><span class="price-new" id="resTotal"></span>
+          </div>
+          <button type="submit" class="btn btn-comprar w-100">Confirmar pedido</button>
+          <a href="carrito.html" class="btn btn-link btn-sm w-100 link-sintel text-decoration-none mt-1">← Volver al carrito</a>
+        </div>
+      </div>
+    </form>`;
+
+  pintarTotales();
+  conectarEventos();
+}
+
+function conectarEventos() {
+  const form = document.getElementById('formCheckout');
+  const camposTarjeta = document.getElementById('camposTarjeta');
+  const tarjetaInputs = camposTarjeta.querySelectorAll('input');
+
+  document.querySelectorAll('input[name="pago"]').forEach(r => r.addEventListener('change', () => {
+    const efectivo = metodoPago() === 'efectivo';
+    camposTarjeta.classList.toggle('d-none', efectivo);
+    document.getElementById('avisoEfectivo').classList.toggle('d-none', !efectivo);
+    tarjetaInputs.forEach(i => { i.required = !efectivo; });
+    pintarTotales();
+  }));
+
+  document.getElementById('tarjetaNumero').addEventListener('input', e => {
+    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim();
+  });
+  document.getElementById('tarjetaVence').addEventListener('input', e => {
+    let v = e.target.value.replace(/\D/g, '').slice(0, 4);
+    if (v.length > 2) v = v.slice(0, 2) + '/' + v.slice(2);
+    e.target.value = v;
+  });
+  document.getElementById('tarjetaCvv').addEventListener('input', e => {
+    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4);
+  });
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    validarTarjeta();
+    form.classList.add('was-validated');
+    if (!form.checkValidity()) {
+      const primero = form.querySelector(':invalid');
+      if (primero) primero.focus();
+      return;
+    }
+    confirmarPedido();
+  });
+}
+
+function validarTarjeta() {
+  const num = document.getElementById('tarjetaNumero');
+  const vence = document.getElementById('tarjetaVence');
+  const cvv = document.getElementById('tarjetaCvv');
+  if (metodoPago() === 'efectivo') {
+    [num, vence, cvv].forEach(i => i.setCustomValidity(''));
+    return;
+  }
+  const digitos = num.value.replace(/\D/g, '');
+  num.setCustomValidity(digitos.length >= 13 && digitos.length <= 19 ? '' : 'invalido');
+
+  let okFecha = false;
+  const m = vence.value.match(/^(\d{2})\/(\d{2})$/);
+  if (m) {
+    const mes = Number(m[1]), anio = 2000 + Number(m[2]);
+    const hoy = new Date();
+    okFecha = mes >= 1 && mes <= 12 && (anio > hoy.getFullYear() || (anio === hoy.getFullYear() && mes >= hoy.getMonth() + 1));
+  }
+  vence.setCustomValidity(okFecha ? '' : 'invalido');
+  cvv.setCustomValidity(/^\d{3,4}$/.test(cvv.value) ? '' : 'invalido');
+}
+
+function confirmarPedido() {
+  const t = totales();
+  const cart = getCart();
+  const pedido = {
+    numero: 'SIN-' + Date.now().toString().slice(-6) + Math.floor(Math.random() * 90 + 10),
+    fecha: new Date().toISOString(),
+    cliente: {
+      nombre: document.getElementById('nombre').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      telefono: document.getElementById('telefono').value.trim(),
+      departamento: document.getElementById('departamento').value,
+      direccion: document.getElementById('direccion').value.trim(),
+      notas: document.getElementById('notas').value.trim()
+    },
+    pago: metodoPago(),   // nunca se guardan los datos de la tarjeta
+    items: cart.map(i => ({ id: i.id, nombre: i.nombre, precio: i.precio, cantidad: i.cantidad })),
+    subtotal: t.subtotal, descuento: t.descuento, total: t.total
+  };
+  try {
+    const pedidos = JSON.parse(localStorage.getItem(PEDIDOS_KEY)) || [];
+    pedidos.push(pedido);
+    localStorage.setItem(PEDIDOS_KEY, JSON.stringify(pedidos));
+  } catch (err) { console.error(err); }
+
+  saveCart([]);
+  document.getElementById('checkoutContent').innerHTML = `
+    <div class="sintel-card p-5 text-center">
+      <div class="perk-icon mx-auto mb-3" style="width:64px;height:64px;font-size:1.8rem;color:var(--sintel-red);">✓</div>
+      <h4 class="fw-bold">¡Gracias por tu compra!</h4>
+      <p class="text-muted mb-1">Tu pedido <strong>${pedido.numero}</strong> fue registrado.</p>
+      <p class="text-muted">Total: <strong>${money(pedido.total)}</strong> · Pago: ${pedido.pago === 'efectivo' ? 'efectivo contra entrega' : 'tarjeta'}.<br>
+      Te contactaremos a ${escapeHtml(pedido.cliente.email)} para coordinar la entrega.</p>
+      <a href="../index.html" class="btn btn-comprar px-4">Volver al inicio</a>
+    </div>`;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function onSessionChange() { render(); }
+document.addEventListener('DOMContentLoaded', render);
+
+</script>
 </body>
 </html>
