@@ -1,11 +1,332 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrito</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carrito</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+  body{ background:#fafafa; display:flex; flex-direction:column; min-height:100vh; }
+  main{ flex:1 0 auto; }
+  footer{ margin-top:auto; }
+  .page-title{ font-weight:800; }
+  .page-title .accent{ color:var(--sintel-red); }
+  .breadcrumb a{ color:#555; }
+  .breadcrumb a:hover{ color:var(--sintel-red); }
+  .sintel-card{ background:#fff; border:1px solid #e5e5e5; border-radius:4px; }
+  .btn-outline-sintel{ color:var(--sintel-red); border:1px solid var(--sintel-red); background:#fff; font-weight:600; }
+  .btn-outline-sintel:hover{ background:var(--sintel-red); color:#fff; }
+  .form-control:focus, .form-select:focus, .form-check-input:focus, .btn-check:focus + .btn{
+    border-color:var(--sintel-red); box-shadow:0 0 0 .2rem rgba(226,35,26,.2);
+  }
+  .form-check-input:checked{ background-color:var(--sintel-red); border-color:var(--sintel-red); }
+  a.link-sintel{ color:var(--sintel-red); font-weight:600; }
+  a.link-sintel:hover{ color:#c31c14; }
+  #cartBadge{ font-size:.65rem; }
+  .thumb-box{ width:90px; height:90px; display:flex; align-items:center; justify-content:center; background:#f8f9fa; border-radius:4px; overflow:hidden; flex-shrink:0; }
+  .thumb-box img{ max-width:100%; max-height:100%; object-fit:contain; }
+  .qty-group{ display:inline-flex; align-items:center; border:1px solid #ddd; border-radius:4px; background:#fff; }
+  .qty-group button{ border:0; background:transparent; width:34px; height:34px; font-weight:700; }
+  .qty-group button:hover:not(:disabled){ color:var(--sintel-red); }
+  .qty-group span{ min-width:34px; text-align:center; font-weight:600; }
+  .summary-sticky{ position:sticky; top:1rem; }
+  .nav-pills .nav-link{ color:#1a1a1a; font-weight:600; }
+  .nav-pills .nav-link.active{ background:var(--sintel-red); color:#fff; }
+</style>
 </head>
 <body>
-    
+
+<header class="top-header py-2">
+  <div class="container d-flex align-items-center justify-content-between flex-wrap gap-2">
+    <div class="order-1" style="min-width:200px;">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Buscar" aria-label="Buscar">
+        <button class="btn btn-search" type="button">
+          <img src="../img/LUPA.png" alt="Buscar" width="18" height="18">
+        </button>
+      </div>
+    </div>
+
+    <div class="order-2 mx-auto">
+      <a href="../index.html"><span class="logo-sintel">SINT<span class="highlight">EL</span></span></a>
+    </div>
+
+    <div class="order-3 d-flex align-items-center gap-3">
+      <span id="sesionArea" class="small"><a href="login.html" class="icon-link">Inicia Sesión</a></span>
+      <a href="carrito.html" class="icon-link position-relative" aria-label="Carrito de compras">
+        <img src="../img/carrito.png" alt="Carrito de compras" width="22" height="22">
+        <span id="cartBadge" class="badge-sale badge rounded-pill position-absolute top-0 start-100 translate-middle d-none">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<nav class="nav-bar py-2">
+  <div class="container d-flex justify-content-center">
+    <ul class="nav gap-4">
+      <li class="nav-item"><a class="nav-link" href="#">Ofertas</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Electrodomesticos</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Informatica</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">TVs</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Audio</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+<div class="container py-4">
+  <h1 class="h3 page-title mb-4">Mi <span class="accent">carrito</span></h1>
+  <div id="cartContent"></div>
+</div>
+
+</main>
+
+<footer class="pt-5 pb-3 mt-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-3">
+        <span class="logo-sintel">SINT<span class="highlight">EL</span></span>
+        <p class="small mt-2">Tecnología y electrodomésticos al mejor precio, con la garantía y el respaldo que buscás.</p>
+      </div>
+      <div class="col-md-3">
+        <h6 class="text-white">Ayuda</h6>
+        <ul class="list-unstyled small">
+          <li><a href="#">Cómo comprar</a></li>
+          <li><a href="#">Preguntas frecuentes</a></li>
+          <li><a href="#">Devoluciones</a></li>
+          <li><a href="#">Envíos</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3">
+        <h6 class="text-white">Nosotros</h6>
+        <ul class="list-unstyled small">
+          <li><a href="#">Quiénes somos</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3">
+        <h6 class="text-white">Legal</h6>
+        <ul class="list-unstyled small">
+          <li><a href="#">Términos y condiciones</a></li>
+          <li><a href="#">Política de privacidad</a></li>
+          <li><a href="#">Garantías</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-3 my-4">
+      <a href="#" class="icon-link"><img src="../img/fb.png" alt="Facebook" style="width: 30px; height: 30px;"></a>
+      <a href="#" class="icon-link"><img src="../img/x.png" alt="X" style="width: 30px; height: 30px;"></a>
+      <a href="#" class="icon-link"><img src="../img/ig.png" alt="Instagram" style="width: 30px; height: 30px;"></a>
+      <a href="#" class="icon-link"><img src="../img/wh.png" alt="WhatsApp" style="width: 30px; height: 30px;"></a>
+    </div>
+
+    <hr class="border-secondary">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center">
+      <p class="small mb-0">Medios de pago</p>
+      <div class="d-flex gap-2">
+        <span class="badge bg-white text-dark">VISA</span>
+        <span class="badge bg-white text-dark">Mastercard</span>
+        <span class="badge bg-white text-dark">AMEX</span>
+        <span class="badge bg-white text-dark">PayPal</span>
+      </div>
+    </div>
+
+    <p class="text-center small text-white mt-4 mb-0">© 2026 SINTEL. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="toastSintel" class="toast align-items-center text-bg-dark border-0" role="status" aria-live="polite" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="toastMsg"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+const CART_KEY = 'sintel_carrito';
+const SESSION_KEY = 'sintel_sesion';
+const IMG_DEFAULT = 'img/refrigerador 2.png';
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function money(n) {
+  return '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+// Las rutas de imagen vienen de la BD como "img/archivo.png" (relativas a /frontend); desde /pages hay que subir un nivel
+function imgSrc(path) {
+  const p = (path && String(path).trim()) || IMG_DEFAULT;
+  return /^(https?:|data:|\/|\.\.\/)/.test(p) ? p : '../' + p;
+}
+function imgFallback(el) {
+  el.onerror = null;
+  el.src = '../' + IMG_DEFAULT;
+}
+
+function getCart() {
+  try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch (e) { return []; }
+}
+function saveCart(cart) {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  updateHeader();
+}
+function cartCount() {
+  return getCart().reduce((t, i) => t + i.cantidad, 0);
+}
+function cartSubtotal() {
+  return getCart().reduce((t, i) => t + i.precio * i.cantidad, 0);
+}
+function addToCart(id, nombre, precio, imagen, stock, cantidad) {
+  cantidad = cantidad || 1;
+  const cart = getCart();
+  const item = cart.find(i => i.id === Number(id));
+  const max = stock != null ? Number(stock) : Infinity;
+  if (item) {
+    item.cantidad = Math.min(item.cantidad + cantidad, max);
+    if (stock != null) item.stock = Number(stock);
+  } else {
+    cart.push({ id: Number(id), nombre, precio: Number(precio), imagen: imagen || '', stock: stock != null ? Number(stock) : null, cantidad: Math.min(cantidad, max) });
+  }
+  saveCart(cart);
+}
+
+function getSession() {
+  try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch (e) { return null; }
+}
+function logout() {
+  localStorage.removeItem(SESSION_KEY);
+  updateHeader();
+  if (typeof onSessionChange === 'function') onSessionChange();
+}
+function updateHeader() {
+  const badge = document.getElementById('cartBadge');
+  const n = cartCount();
+  badge.textContent = n;
+  badge.classList.toggle('d-none', n === 0);
+
+  const area = document.getElementById('sesionArea');
+  const s = getSession();
+  if (s) {
+    area.innerHTML = `<span class="text-white">Hola, ${escapeHtml(s.nombre.split(' ')[0])}</span> · <a href="#" id="btnSalir" class="icon-link">Salir</a>`;
+    document.getElementById('btnSalir').addEventListener('click', e => { e.preventDefault(); logout(); });
+  } else {
+    area.innerHTML = '<a href="login.html" class="icon-link">Inicia Sesión</a>';
+  }
+}
+function showToast(msg) {
+  document.getElementById('toastMsg').textContent = msg;
+  bootstrap.Toast.getOrCreateInstance(document.getElementById('toastSintel'), { delay: 2500 }).show();
+}
+document.addEventListener('DOMContentLoaded', updateHeader);
+
+
+function filaItem(i) {
+  const tope = i.stock != null ? i.stock : Infinity;
+  return `
+    <div class="sintel-card p-3 mb-3" data-id="${i.id}">
+      <div class="d-flex gap-3 align-items-center flex-wrap">
+        <div class="thumb-box">
+          <img src="${escapeHtml(imgSrc(i.imagen))}" alt="${escapeHtml(i.nombre)}" onerror="imgFallback(this)">
+        </div>
+        <div class="flex-grow-1" style="min-width:160px;">
+          <a href="producto.html?id=${i.id}" class="text-reset"><p class="small fw-bold mb-1">${escapeHtml(i.nombre)}</p></a>
+          <p class="small text-muted mb-0">${money(i.precio)} c/u</p>
+        </div>
+        <div class="qty-group">
+          <button type="button" data-accion="menos" aria-label="Disminuir" ${i.cantidad <= 1 ? 'disabled' : ''}>−</button>
+          <span>${i.cantidad}</span>
+          <button type="button" data-accion="mas" aria-label="Aumentar" ${i.cantidad >= tope ? 'disabled' : ''}>+</button>
+        </div>
+        <div class="text-end" style="min-width:90px;">
+          <p class="price-new mb-1">${money(i.precio * i.cantidad)}</p>
+          <button type="button" class="btn btn-link btn-sm p-0 link-sintel text-decoration-none" data-accion="quitar">Eliminar</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function render() {
+  const cart = getCart();
+  const cont = document.getElementById('cartContent');
+
+  if (!cart.length) {
+    cont.innerHTML = `
+      <div class="sintel-card p-5 text-center">
+        <img src="../img/carrito.png" alt="" width="48" height="48" style="filter:invert(1);opacity:.35;" class="mb-3">
+        <h5 class="fw-bold">Tu carrito está vacío</h5>
+        <p class="text-muted">Agrega productos para verlos aquí.</p>
+        <a href="../index.html" class="btn btn-comprar px-4">Ir a comprar</a>
+      </div>`;
+    return;
+  }
+
+  const unidades = cartCount();
+  const subtotal = cartSubtotal();
+  cont.innerHTML = `
+    <div class="row g-4">
+      <div class="col-lg-8">
+        ${cart.map(filaItem).join('')}
+        <div class="d-flex justify-content-between flex-wrap gap-2">
+          <a href="../index.html" class="btn btn-outline-sintel btn-sm">← Seguir comprando</a>
+          <button type="button" id="btnVaciar" class="btn btn-link btn-sm link-sintel text-decoration-none">Vaciar carrito</button>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="sintel-card p-3 summary-sticky">
+          <h6 class="fw-bold mb-3">Resumen del pedido</h6>
+          <div class="d-flex justify-content-between small mb-2">
+            <span>Productos (${unidades})</span><span>${money(subtotal)}</span>
+          </div>
+          <div class="d-flex justify-content-between small mb-2">
+            <span>Envío</span><span class="text-muted">Se define en el checkout</span>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="fw-bold">Total</span>
+            <span class="price-new">${money(subtotal)}</span>
+          </div>
+          <a href="checkout.html" class="btn btn-comprar w-100 mb-2">Finalizar compra</a>
+          <p class="small text-muted mb-0">¡Paga en efectivo con 10% off! El descuento se aplica al elegir el método de pago.</p>
+        </div>
+      </div>
+    </div>`;
+}
+
+document.getElementById('cartContent').addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  if (btn.id === 'btnVaciar') {
+    if (confirm('¿Quieres vaciar todo el carrito?')) { saveCart([]); render(); }
+    return;
+  }
+  const fila = btn.closest('[data-id]');
+  if (!fila || !btn.dataset.accion) return;
+  const cart = getCart();
+  const idx = cart.findIndex(i => i.id === Number(fila.dataset.id));
+  if (idx < 0) return;
+  const item = cart[idx];
+  if (btn.dataset.accion === 'mas') {
+    const tope = item.stock != null ? item.stock : Infinity;
+    if (item.cantidad < tope) item.cantidad++;
+  } else if (btn.dataset.accion === 'menos') {
+    if (item.cantidad > 1) item.cantidad--;
+  } else if (btn.dataset.accion === 'quitar') {
+    cart.splice(idx, 1);
+  }
+  saveCart(cart);
+  render();
+});
+
+document.addEventListener('DOMContentLoaded', render);
+
+</script>
 </body>
 </html>
