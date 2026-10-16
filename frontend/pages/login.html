@@ -1,11 +1,380 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iniciar sesión | Sintel</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+  body{ background:#fafafa; display:flex; flex-direction:column; min-height:100vh; }
+  main{ flex:1 0 auto; }
+  footer{ margin-top:auto; }
+  .page-title{ font-weight:800; }
+  .page-title .accent{ color:var(--sintel-red); }
+  .breadcrumb a{ color:#555; }
+  .breadcrumb a:hover{ color:var(--sintel-red); }
+  .sintel-card{ background:#fff; border:1px solid #e5e5e5; border-radius:4px; }
+  .btn-outline-sintel{ color:var(--sintel-red); border:1px solid var(--sintel-red); background:#fff; font-weight:600; }
+  .btn-outline-sintel:hover{ background:var(--sintel-red); color:#fff; }
+  .form-control:focus, .form-select:focus, .form-check-input:focus, .btn-check:focus + .btn{
+    border-color:var(--sintel-red); box-shadow:0 0 0 .2rem rgba(226,35,26,.2);
+  }
+  .form-check-input:checked{ background-color:var(--sintel-red); border-color:var(--sintel-red); }
+  a.link-sintel{ color:var(--sintel-red); font-weight:600; }
+  a.link-sintel:hover{ color:#c31c14; }
+  #cartBadge{ font-size:.65rem; }
+  .thumb-box{ width:90px; height:90px; display:flex; align-items:center; justify-content:center; background:#f8f9fa; border-radius:4px; overflow:hidden; flex-shrink:0; }
+  .thumb-box img{ max-width:100%; max-height:100%; object-fit:contain; }
+  .qty-group{ display:inline-flex; align-items:center; border:1px solid #ddd; border-radius:4px; background:#fff; }
+  .qty-group button{ border:0; background:transparent; width:34px; height:34px; font-weight:700; }
+  .qty-group button:hover:not(:disabled){ color:var(--sintel-red); }
+  .qty-group span{ min-width:34px; text-align:center; font-weight:600; }
+  .summary-sticky{ position:sticky; top:1rem; }
+  .nav-pills .nav-link{ color:#1a1a1a; font-weight:600; }
+  .nav-pills .nav-link.active{ background:var(--sintel-red); color:#fff; }
+</style>
 </head>
 <body>
-    
+
+<header class="top-header py-2">
+  <div class="container d-flex align-items-center justify-content-between flex-wrap gap-2">
+    <div class="order-1" style="min-width:200px;">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Buscar" aria-label="Buscar">
+        <button class="btn btn-search" type="button">
+          <img src="../img/LUPA.png" alt="Buscar" width="18" height="18">
+        </button>
+      </div>
+    </div>
+
+    <div class="order-2 mx-auto">
+      <a href="../index.html"><span class="logo-sintel">SINT<span class="highlight">EL</span></span></a>
+    </div>
+
+    <div class="order-3 d-flex align-items-center gap-3">
+      <span id="sesionArea" class="small"><a href="login.html" class="icon-link">Inicia Sesión</a></span>
+      <a href="carrito.html" class="icon-link position-relative" aria-label="Carrito de compras">
+        <img src="../img/carrito.png" alt="Carrito de compras" width="22" height="22">
+        <span id="cartBadge" class="badge-sale badge rounded-pill position-absolute top-0 start-100 translate-middle d-none">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<nav class="nav-bar py-2">
+  <div class="container d-flex justify-content-center">
+    <ul class="nav gap-4">
+      <li class="nav-item"><a class="nav-link" href="#">Ofertas</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Electrodomesticos</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Informatica</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">TVs</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Audio</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+<div class="container py-5">
+  <div class="mx-auto" style="max-width:440px;">
+    <div class="text-center mb-4">
+      <h1 class="h3 page-title mb-1">Bienvenido a <span class="logo-sintel" style="color:var(--sintel-dark);font-size:inherit;">SINT<span class="highlight">EL</span></span></h1>
+      <p class="small text-muted mb-0">Inicia sesión o crea tu cuenta para comprar más rápido.</p>
+    </div>
+
+    <div class="sintel-card p-4">
+      <ul class="nav nav-pills nav-fill mb-4" id="authTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="tab-login" data-bs-toggle="pill" data-bs-target="#panel-login" type="button" role="tab">Iniciar sesión</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab-registro" data-bs-toggle="pill" data-bs-target="#panel-registro" type="button" role="tab">Crear cuenta</button>
+        </li>
+      </ul>
+
+      <div id="authAlert" class="alert alert-danger small py-2 d-none" role="alert"></div>
+
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="panel-login" role="tabpanel">
+          <form id="formLogin" novalidate>
+            <div class="mb-3">
+              <label class="form-label small fw-bold" for="loginEmail">Correo electrónico</label>
+              <input type="email" class="form-control" id="loginEmail" autocomplete="email" required>
+              <div class="invalid-feedback">Ingresa un correo válido.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold" for="loginPass">Contraseña</label>
+              <input type="password" class="form-control" id="loginPass" autocomplete="current-password" required>
+              <div class="invalid-feedback">Ingresa tu contraseña.</div>
+            </div>
+            <button type="submit" class="btn btn-comprar w-100">Entrar</button>
+          </form>
+        </div>
+
+        <div class="tab-pane fade" id="panel-registro" role="tabpanel">
+          <form id="formRegistro" novalidate>
+            <div class="mb-3">
+              <label class="form-label small fw-bold" for="regNombre">Nombre completo</label>
+              <input type="text" class="form-control" id="regNombre" autocomplete="name" required minlength="3">
+              <div class="invalid-feedback">Ingresa tu nombre completo.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold" for="regEmail">Correo electrónico</label>
+              <input type="email" class="form-control" id="regEmail" autocomplete="email" required>
+              <div class="invalid-feedback">Ingresa un correo válido.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold" for="regPass">Contraseña</label>
+              <input type="password" class="form-control" id="regPass" autocomplete="new-password" required minlength="6">
+              <div class="invalid-feedback">Mínimo 6 caracteres.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold" for="regPass2">Confirmar contraseña</label>
+              <input type="password" class="form-control" id="regPass2" autocomplete="new-password" required>
+              <div class="invalid-feedback">Las contraseñas no coinciden.</div>
+            </div>
+            <button type="submit" class="btn btn-comprar w-100">Crear cuenta</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-center small mt-3 mb-0"><a href="../index.html" class="link-sintel">← Volver a la tienda</a></p>
+  </div>
+</div>
+
+</main>
+
+<footer class="pt-5 pb-3 mt-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-3">
+        <span class="logo-sintel">SINT<span class="highlight">EL</span></span>
+        <p class="small mt-2">Tecnología y electrodomésticos al mejor precio, con la garantía y el respaldo que buscás.</p>
+      </div>
+      <div class="col-md-3">
+        <h6 class="text-white">Ayuda</h6>
+        <ul class="list-unstyled small">
+          <li><a href="#">Cómo comprar</a></li>
+          <li><a href="#">Preguntas frecuentes</a></li>
+          <li><a href="#">Devoluciones</a></li>
+          <li><a href="#">Envíos</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3">
+        <h6 class="text-white">Nosotros</h6>
+        <ul class="list-unstyled small">
+          <li><a href="#">Quiénes somos</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3">
+        <h6 class="text-white">Legal</h6>
+        <ul class="list-unstyled small">
+          <li><a href="#">Términos y condiciones</a></li>
+          <li><a href="#">Política de privacidad</a></li>
+          <li><a href="#">Garantías</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-3 my-4">
+      <a href="#" class="icon-link"><img src="../img/fb.png" alt="Facebook" style="width: 30px; height: 30px;"></a>
+      <a href="#" class="icon-link"><img src="../img/x.png" alt="X" style="width: 30px; height: 30px;"></a>
+      <a href="#" class="icon-link"><img src="../img/ig.png" alt="Instagram" style="width: 30px; height: 30px;"></a>
+      <a href="#" class="icon-link"><img src="../img/wh.png" alt="WhatsApp" style="width: 30px; height: 30px;"></a>
+    </div>
+
+    <hr class="border-secondary">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center">
+      <p class="small mb-0">Medios de pago</p>
+      <div class="d-flex gap-2">
+        <span class="badge bg-white text-dark">VISA</span>
+        <span class="badge bg-white text-dark">Mastercard</span>
+        <span class="badge bg-white text-dark">AMEX</span>
+        <span class="badge bg-white text-dark">PayPal</span>
+      </div>
+    </div>
+
+    <p class="text-center small text-white mt-4 mb-0">© 2026 SINTEL. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="toastSintel" class="toast align-items-center text-bg-dark border-0" role="status" aria-live="polite" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="toastMsg"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+const CART_KEY = 'sintel_carrito';
+const SESSION_KEY = 'sintel_sesion';
+const IMG_DEFAULT = 'img/refrigerador 2.png';
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function money(n) {
+  return '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+// Las rutas de imagen vienen de la BD como "img/archivo.png" (relativas a /frontend); desde /pages hay que subir un nivel
+function imgSrc(path) {
+  const p = (path && String(path).trim()) || IMG_DEFAULT;
+  return /^(https?:|data:|\/|\.\.\/)/.test(p) ? p : '../' + p;
+}
+function imgFallback(el) {
+  el.onerror = null;
+  el.src = '../' + IMG_DEFAULT;
+}
+
+function getCart() {
+  try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch (e) { return []; }
+}
+function saveCart(cart) {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  updateHeader();
+}
+function cartCount() {
+  return getCart().reduce((t, i) => t + i.cantidad, 0);
+}
+function cartSubtotal() {
+  return getCart().reduce((t, i) => t + i.precio * i.cantidad, 0);
+}
+function addToCart(id, nombre, precio, imagen, stock, cantidad) {
+  cantidad = cantidad || 1;
+  const cart = getCart();
+  const item = cart.find(i => i.id === Number(id));
+  const max = stock != null ? Number(stock) : Infinity;
+  if (item) {
+    item.cantidad = Math.min(item.cantidad + cantidad, max);
+    if (stock != null) item.stock = Number(stock);
+  } else {
+    cart.push({ id: Number(id), nombre, precio: Number(precio), imagen: imagen || '', stock: stock != null ? Number(stock) : null, cantidad: Math.min(cantidad, max) });
+  }
+  saveCart(cart);
+}
+
+function getSession() {
+  try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch (e) { return null; }
+}
+function logout() {
+  localStorage.removeItem(SESSION_KEY);
+  updateHeader();
+  if (typeof onSessionChange === 'function') onSessionChange();
+}
+function updateHeader() {
+  const badge = document.getElementById('cartBadge');
+  const n = cartCount();
+  badge.textContent = n;
+  badge.classList.toggle('d-none', n === 0);
+
+  const area = document.getElementById('sesionArea');
+  const s = getSession();
+  if (s) {
+    area.innerHTML = `<span class="text-white">Hola, ${escapeHtml(s.nombre.split(' ')[0])}</span> · <a href="#" id="btnSalir" class="icon-link">Salir</a>`;
+    document.getElementById('btnSalir').addEventListener('click', e => { e.preventDefault(); logout(); });
+  } else {
+    area.innerHTML = '<a href="login.html" class="icon-link">Inicia Sesión</a>';
+  }
+}
+function showToast(msg) {
+  document.getElementById('toastMsg').textContent = msg;
+  bootstrap.Toast.getOrCreateInstance(document.getElementById('toastSintel'), { delay: 2500 }).show();
+}
+document.addEventListener('DOMContentLoaded', updateHeader);
+
+
+const USERS_KEY = 'sintel_usuarios';
+
+// Mientras no exista el endpoint de usuarios en el backend, las cuentas se guardan localmente (con la contraseña en hash)
+async function hash(texto) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(texto));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function getUsers() {
+  try { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; } catch (e) { return []; }
+}
+function mostrarAlerta(msg) {
+  const a = document.getElementById('authAlert');
+  a.textContent = msg;
+  a.classList.toggle('d-none', !msg);
+}
+function destino() {
+  const r = new URLSearchParams(location.search).get('redirect');
+  return ({ checkout: 'checkout.html', carrito: 'carrito.html' })[r] || '../index.html';
+}
+function iniciarSesion(user) {
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ nombre: user.nombre, email: user.email }));
+  location.href = destino();
+}
+
+document.getElementById('authTabs').addEventListener('click', () => mostrarAlerta(''));
+
+document.getElementById('formLogin').addEventListener('submit', async e => {
+  e.preventDefault();
+  const form = e.target;
+  form.classList.add('was-validated');
+  if (!form.checkValidity()) return;
+  mostrarAlerta('');
+  try {
+    const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+    const h = await hash(document.getElementById('loginPass').value);
+    const user = getUsers().find(u => u.email === email && u.hash === h);
+    if (!user) return mostrarAlerta('Correo o contraseña incorrectos.');
+    iniciarSesion(user);
+  } catch (err) {
+    console.error(err);
+    mostrarAlerta('No se pudo iniciar sesión. Abre el sitio desde localhost o un servidor local.');
+  }
+});
+
+document.getElementById('formRegistro').addEventListener('submit', async e => {
+  e.preventDefault();
+  const form = e.target;
+  const p1 = document.getElementById('regPass');
+  const p2 = document.getElementById('regPass2');
+  p2.setCustomValidity(p1.value === p2.value ? '' : 'no coincide');
+  form.classList.add('was-validated');
+  if (!form.checkValidity()) return;
+  mostrarAlerta('');
+  try {
+    const email = document.getElementById('regEmail').value.trim().toLowerCase();
+    const users = getUsers();
+    if (users.some(u => u.email === email)) return mostrarAlerta('Ya existe una cuenta con ese correo.');
+    const user = { nombre: document.getElementById('regNombre').value.trim(), email, hash: await hash(p1.value) };
+    users.push(user);
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    iniciarSesion(user);
+  } catch (err) {
+    console.error(err);
+    mostrarAlerta('No se pudo crear la cuenta. Abre el sitio desde localhost o un servidor local.');
+  }
+});
+
+document.getElementById('regPass2').addEventListener('input', e => e.target.setCustomValidity(''));
+
+// Si ya hay sesion iniciada, no tiene sentido mostrar el formulario
+document.addEventListener('DOMContentLoaded', () => {
+  const s = getSession();
+  if (s) {
+    document.querySelector('.sintel-card').innerHTML = `
+      <div class="text-center">
+        <h5 class="fw-bold">Hola, ${escapeHtml(s.nombre)}</h5>
+        <p class="small text-muted">Ya iniciaste sesión con ${escapeHtml(s.email)}.</p>
+        <a href="../index.html" class="btn btn-comprar px-4 mb-2">Ir a la tienda</a><br>
+        <button type="button" id="btnCerrar" class="btn btn-link btn-sm link-sintel text-decoration-none">Cerrar sesión</button>
+      </div>`;
+    document.getElementById('btnCerrar').addEventListener('click', () => { logout(); location.reload(); });
+  }
+});
+
+</script>
 </body>
 </html>
